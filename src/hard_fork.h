@@ -1,0 +1,6 @@
+#ifndef HARD_FORK_H
+#define HARD_FORK_H
+
+const int HARD_FORK_VERSION_SIGREVIVAL = 276500;
+
+#endif //HARD_FORK_H
