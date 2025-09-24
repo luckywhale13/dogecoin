@@ -39,9 +39,6 @@
 #include "versionbits.h"
 #include "warnings.h"
 #include "base58.h"
-
-#include "hard_fork.h"
-
 #include <atomic>
 #include <sstream>
 
@@ -3759,7 +3756,7 @@ bool IsWitnessEnabled(const CBlockIndex* pindexPrev, const Consensus::Params& pa
 
 ChainSigVersion GetChainSigVersion(const CBlockIndex* pindexPrev, const Consensus::Params& params)
 {
-    if (pindexPrev->nHeight >= HARD_FORK_VERSION_SIGREVIVAL) {
+    if (pindexPrev->nHeight >= 276500) {
         return CHAINSIG_VERSION_REVIVAL;
     }
 
