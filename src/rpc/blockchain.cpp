@@ -4,7 +4,7 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include "blockchain.h"
+#include "amount.h"
 #include "chain.h"
 #include "chainparams.h"
 #include "checkpoints.h"
@@ -34,6 +34,12 @@
 #include <mutex>
 #include <condition_variable>
 using namespace std;
+
+const int NUM_GETBLOCKSTATS_PERCENTILES = 5;
+
+/** Used by getblockstats to get feerates at different percentiles by weight  */
+void CalculatePercentilesByWeight(CAmount result[NUM_GETBLOCKSTATS_PERCENTILES], std::vector<std::pair<CAmount, int64_t>>& scores, int64_t total_weight);
+
 
 struct CUpdatedBlock
 {
