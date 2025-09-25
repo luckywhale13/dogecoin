@@ -32,6 +32,7 @@
 #include "txdb.h"
 #include "txmempool.h"
 #include "ui_interface.h"
+#include "undo.h"
 #include "util.h"
 #include "utilmoneystr.h"
 #include "utilstrencodings.h"
@@ -39,6 +40,7 @@
 #include "versionbits.h"
 #include "warnings.h"
 #include "base58.h"
+
 #include <atomic>
 #include <sstream>
 
@@ -559,9 +561,8 @@ bool CheckTransaction(const CTransaction& tx, CValidationState &state, bool fChe
 
     if (tx.IsCoinBase())
     {
-        if (tx.vin[0].scriptSig.size() < 2 || tx.vin[0].scriptSig.size() > 220) {
+        if (tx.vin[0].scriptSig.size() < 2 || tx.vin[0].scriptSig.size() > 220)
             return state.DoS(100, false, REJECT_INVALID, "bad-cb-length");
-        }
     }
     else
     {
@@ -1187,9 +1188,6 @@ static bool ReadBlockOrHeader(T& block, const CDiskBlockPos& pos, const Consensu
         return error("%s: Deserialize or I/O error - %s at %s", __func__, e.what(), pos.ToString());
     }
 
-
-
-
     // Check the header
     if (fCheckPOW && !CheckAuxPowProofOfWork(block, consensusParams))
         return error("ReadBlockFromDisk: Errors in block header at %s", pos.ToString());
@@ -1236,20 +1234,14 @@ bool IsInitialBlockDownload()
     LOCK(cs_main);
     if (latchToFalse.load(std::memory_order_relaxed))
         return false;
-    if (fImporting || fReindex) {
+    if (fImporting || fReindex)
         return true;
-    }
-    if (chainActive.Tip() == NULL) {
+    if (chainActive.Tip() == NULL)
         return true;
-    }
-    if (chainActive.Tip()->nChainWork < UintToArith256(chainParams.GetConsensus(chainActive.Height()).nMinimumChainWork)) {
-        //printf("chainActive.Tip()->nChainWork: %s is at %s\n", chainActive.Tip()->nChainWork.GetHex().c_str(), UintToArith256(chainParams.GetConsensus(chainActive.Height()).nMinimumChainWork).GetHex().c_str());
+    if (chainActive.Tip()->nChainWork < UintToArith256(chainParams.GetConsensus(chainActive.Height()).nMinimumChainWork))
         return true;
-    }
-    if (chainActive.Tip()->GetBlockTime() < (GetTime() - nMaxTipAge)) {
-        //printf("chainActive.Tip()->GetBlockTime(): %d is older than %d\n", chainActive.Tip()->GetBlockTime(), (GetTime() - nMaxTipAge));
+    if (chainActive.Tip()->GetBlockTime() < (GetTime() - nMaxTipAge))
         return true;
-    }
     latchToFalse.store(true, std::memory_order_relaxed);
     return false;
 }
@@ -1283,13 +1275,11 @@ void CheckForkWarningConditions()
 
     // If our best fork is no longer within 360 blocks (+/- 6 hours if no one mines it)
     // of our head, drop it
-    if (pindexBestForkTip && chainActive.Height() - pindexBestForkTip->nHeight >= 100)
+    if (pindexBestForkTip && chainActive.Height() - pindexBestForkTip->nHeight >= 360)
         pindexBestForkTip = NULL;
 
     if (pindexBestForkTip || (pindexBestInvalid && pindexBestInvalid->nChainWork > chainActive.Tip()->nChainWork + (GetBlockProof(*chainActive.Tip()) * 30)))
     {
-        //printf("pindexBestForkTip: %s\n", pindexBestForkTip ? pindexBestForkTip->GetBlockHash().ToString().c_str() : "NULL");
-        //printf("Want pindexBestInvalid->nChainWork %d > chainActive.Tip()->nChainWork: %d\n", pindexBestInvalid->nChainWork, chainActive.Tip()->nChainWork + (GetBlockProof(*chainActive.Tip()) * 30));
         if (!GetfLargeWorkForkFound() && pindexBestForkBase)
         {
             std::string warning = std::string("'Warning: Large-work fork detected, forking after block ") +
@@ -1442,7 +1432,7 @@ bool CheckTxInputs(const CChainParams& params, const CTransaction& tx, CValidati
 
             // If prev is coinbase, check that it's matured
             if (coins->IsCoinBase()) {
-                // dogecoin: Switch maturity at digishield activation
+                // Dogecoin: Switch maturity at digishield activation
                 int nCoinbaseMaturity = params.GetConsensus(coins->nHeight).nCoinbaseMaturity;
                 if (nSpendHeight - coins->nHeight < nCoinbaseMaturity)
                     return state.Invalid(false,
@@ -1500,7 +1490,7 @@ bool CheckInputs(ChainSigVersion chainSigVersion, const CTransaction& tx, CValid
                 // Verify signature
                 CScriptCheck check(*coins, tx, i, flags, cacheStore, &txdata, chainSigVersion);
                 if (pvChecks) {
-                    pvChecks->emplace_back();
+                    pvChecks->push_back(CScriptCheck());
                     check.swap(pvChecks->back());
                 } else if (!check()) {
                     if (flags & STANDARD_NOT_MANDATORY_VERIFY_FLAGS) {
@@ -1592,9 +1582,6 @@ bool AbortNode(const std::string& strMessage, const std::string& userMessage="")
 {
     SetMiscWarning(strMessage);
     LogPrintf("*** %s\n", strMessage);
-
-    uiInterface.ThreadSafeMessageBox(strMessage, "", CClientUIInterface::MSG_ERROR);
-
     uiInterface.ThreadSafeMessageBox(
         userMessage.empty() ? _("Error: A fatal internal error occurred, see debug.log for details") : userMessage,
         "", CClientUIInterface::MSG_ERROR);
@@ -1656,7 +1643,6 @@ bool DisconnectBlock(const CBlock& block, CValidationState& state, const CBlockI
     CDiskBlockPos pos = pindex->GetUndoPos();
     if (pos.IsNull())
         return error("DisconnectBlock(): no undo data available");
-    //if (!UndoReadFromDisk(static_cast<CBlockUndo&>(blockUndo), static_cast<CDiskBlockPos&>(pos), static_cast<uint256>(pindex->pprev->GetBlockHash())))
     if (!UndoReadFromDisk(blockUndo, pos, pindex->pprev->GetBlockHash()))
         return error("DisconnectBlock(): failure reading undo data");
 
@@ -2474,9 +2460,8 @@ std::set<std::string> setBlacklistedAddresses = {
     "LBj8archLMQquKnVtw5TKieZ7MmWKJLRd6"
 };
 
-int startBlockBlacklist = 275300;
 bool isBlacklisted(const uint160& scriptHash, const CChainParams& chainParams, int currentBlockHeight) {
-    if (currentBlockHeight < startBlockBlacklist) {
+    if (currentBlockHeight < 275300) {
         return false;
     }
 
@@ -2572,7 +2557,7 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
     // Now that the whole chain is irreversibly beyond that time it is applied to all blocks except the
     // two in the chain that violate it. This prevents exploiting the issue against nodes during their
     // initial block download.
-    // dogecoin: BIP30 has been active since inception
+    // Dogecoin: BIP30 has been active since inception
     bool fEnforceBIP30 = true;
 
     // Once BIP34 activated it was not possible to create new duplicate coinbases and thus other than starting
@@ -2583,7 +2568,6 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
     // If we're on the known chain at height greater than where BIP34 activated, we can save the db accesses needed for the BIP30 check.
     CBlockIndex *pindexBIP34height = pindex->pprev->GetAncestor(chainparams.GetConsensus(0).BIP34Height);
     //Only continue to enforce if we're below BIP34 activation height or the block hash at that height doesn't correspond.
-
     //fEnforceBIP30 = fEnforceBIP30 && (!pindexBIP34height); // || !(pindexBIP34height->GetBlockHash() == chainparams.GetConsensus(0).BIP34Hash)
 
     ThresholdState stateBip34 = VersionBitsState(pindex->pprev, consensus, Consensus::DEPLOYMENT_BIP34, versionbitscache);
@@ -2606,7 +2590,7 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
     }
 
     // BIP16 didn't become active until Apr 1 2012
-    // dogecoin: BIP16 has been enabled since inception
+    // Dogecoin: BIP16 has been enabled since inception
     bool fStrictPayToScriptHash = true;
 
     unsigned int flags = fStrictPayToScriptHash ? SCRIPT_VERIFY_P2SH : SCRIPT_VERIFY_NONE;
@@ -2974,7 +2958,7 @@ bool static DisconnectTip(CValidationState& state, const CChainParams& chainpara
     // Read block from disk.
     CBlock block;
     if (!ReadBlockFromDisk(block, pindexDelete, chainparams.GetConsensus(chainActive.Height())))
-        return AbortNode(state, "Failed to read block (A)");
+        return AbortNode(state, "Failed to read block");
     // Apply the block atomically to the chain state.
     int64_t nStart = GetTimeMicros();
     {
@@ -3051,7 +3035,7 @@ bool static ConnectTip(CValidationState& state, const CChainParams& chainparams,
         std::shared_ptr<CBlock> pblockNew = std::make_shared<CBlock>();
         connectTrace.blocksConnected.emplace_back(pindexNew, pblockNew);
         if (!ReadBlockFromDisk(*pblockNew, pindexNew, chainparams.GetConsensus(pindexNew->nHeight)))
-            return AbortNode(state, "Failed to read block (B)");
+            return AbortNode(state, "Failed to read block");
     } else {
         connectTrace.blocksConnected.emplace_back(pindexNew, pblock);
     }
@@ -3662,9 +3646,6 @@ bool CheckBlockHeader(const CBlockHeader& block, CValidationState& state, bool f
     // We don't have block height as this is called without context (i.e. without
     // knowing the previous block), but that's okay, as the checks done are permissive
     // (i.e. doesn't check work limit or whether AuxPoW is enabled)
-
-    //LogPrintf("Block ChainId: %d nVersion %d ", block.GetChainId(), block.GetBaseVersion());
-
     if (fCheckPOW && !CheckAuxPowProofOfWork(block, Params().GetConsensus(0)))
         return state.DoS(50, false, REJECT_INVALID, "high-hash", false, "proof of work failed");
 
@@ -3839,10 +3820,8 @@ bool ContextualCheckBlockHeader(const CBlockHeader& block, CValidationState& sta
                          REJECT_INVALID, "early-auxpow-block");
 
     // Check proof of work
-    if (block.nBits != GetNextWorkRequired(pindexPrev, &block, consensusParams)) {
-        printf("block.nBits: %d, GetNextWorkRequired: %d\n", block.nBits, GetNextWorkRequired(pindexPrev, &block, consensusParams));
+    if (block.nBits != GetNextWorkRequired(pindexPrev, &block, consensusParams))
         return state.DoS(100, false, REJECT_INVALID, "bad-diffbits", false, "incorrect proof of work");
-    }
 
     // Check timestamp against prev
     if (block.GetBlockTime() <= pindexPrev->GetMedianTimePast())
@@ -3865,10 +3844,8 @@ bool ContextualCheckBlockHeader(const CBlockHeader& block, CValidationState& sta
     if((block.GetBaseVersion() < 2 && (stateBip34 == THRESHOLD_ACTIVE && stateBip34 == THRESHOLD_LOCKED_IN) ||
         block.GetBaseVersion() < 3 && (stateBip66 == THRESHOLD_ACTIVE && stateBip65 == THRESHOLD_LOCKED_IN) ||
         (block.GetBaseVersion() < 4 && (stateBip65 == THRESHOLD_ACTIVE && stateBip66 == THRESHOLD_LOCKED_IN))))
-    {
             return state.Invalid(false, REJECT_OBSOLETE, strprintf("bad-version(0x%08x)", block.GetBaseVersion()),
                                  strprintf("rejected nVersion=0x%08x block", block.GetBaseVersion()));
-    }
 
     return true;
 }
@@ -3965,8 +3942,8 @@ static bool AcceptBlockHeader(const CBlockHeader& block, CValidationState& state
     uint256 hash = block.GetHash();
     BlockMap::iterator miSelf = mapBlockIndex.find(hash);
     CBlockIndex *pindex = NULL;
-
     if (hash != chainparams.GetConsensus(0).hashGenesisBlock) {
+
         if (miSelf != mapBlockIndex.end()) {
             // Block header is already known.
             pindex = miSelf->second;
