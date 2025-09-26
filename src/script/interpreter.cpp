@@ -1175,7 +1175,7 @@ PrecomputedTransactionData::PrecomputedTransactionData(const CTransaction& txTo)
     hashOutputs = GetOutputsHash(txTo);
 }
 
-uint256 SignatureHash(const CScript& scriptCode, const CTransaction& txTo, unsigned int nIn, int nHashType, const CAmount& amount, SigVersion sigversion, ChainSigVersion chainSigVersion = CHAINSIG_VERSION_LATEST, const PrecomputedTransactionData* cache = NULL)
+uint256 SignatureHash(const CScript& scriptCode, const CTransaction& txTo, unsigned int nIn, int nHashType, const CAmount& amount, SigVersion sigversion, ChainSigVersion chainSigVersion, const PrecomputedTransactionData* cache)
 {
     if (sigversion == SIGVERSION_WITNESS_V0) {
         uint256 hashPrevouts;
