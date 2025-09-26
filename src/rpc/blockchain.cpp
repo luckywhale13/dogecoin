@@ -35,11 +35,11 @@
 #include <condition_variable>
 using namespace std;
 
-const int NUM_GETBLOCKSTATS_PERCENTILES = 5;
+
+static constexpr int NUM_GETBLOCKSTATS_PERCENTILES = 5;
 
 /** Used by getblockstats to get feerates at different percentiles by weight  */
 void CalculatePercentilesByWeight(CAmount result[NUM_GETBLOCKSTATS_PERCENTILES], std::vector<std::pair<CAmount, int64_t>>& scores, int64_t total_weight);
-
 
 struct CUpdatedBlock
 {

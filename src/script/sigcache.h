@@ -25,7 +25,7 @@ private:
     bool store;
 
 public:
-    CachingTransactionSignatureChecker(ChainSigVersion chainSigVersion, const CTransaction* txToIn, unsigned int nInIn, const CAmount& amount, bool storeIn, PrecomputedTransactionData& txdataIn) : TransactionSignatureChecker(chainSigVersion, txToIn, nInIn, amount, txdataIn), store(storeIn) {}
+    CachingTransactionSignatureChecker(const CTransaction* txToIn, unsigned int nInIn, const CAmount& amount, bool storeIn, PrecomputedTransactionData& txdataIn, ChainSigVersion chainSigVersion = CHAINSIG_VERSION_LATEST) : TransactionSignatureChecker(txToIn, nInIn, amount, txdataIn, chainSigVersion), store(storeIn) {}
 
     bool VerifySignature(const std::vector<unsigned char>& vchSig, const CPubKey& vchPubKey, const uint256& sighash) const;
 };

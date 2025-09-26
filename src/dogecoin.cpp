@@ -29,11 +29,10 @@ bool AllowDigishieldMinDifficultyForBlock(const CBlockIndex* pindexLast, const C
     if (!params.fPowAllowMinDifficultyBlocks)
         return false;
 
-    // check if the chain allows minimum difficulty blocks on recalc blocks 157500
-    if ((unsigned)pindexLast->nHeight < params.nHeightEffective) { //minDifficultyConsensus.nHeightEffective
-        //if (!params.fPowAllowDigishieldMinDifficultyBlocks)
+    // check if the chain allows minimum difficulty blocks on recalc blocks
+    if ((unsigned)pindexLast->nHeight < params.nHeightEffective)
+    // if (!params.fPowAllowDigishieldMinDifficultyBlocks)
         return false;
-    }
 
     // Allow for a minimum block time if the elapsed time > 2*nTargetSpacing
     return (pblock->GetBlockTime() > pindexLast->GetBlockTime() + params.nPowTargetSpacing*2);
@@ -131,14 +130,11 @@ bool CheckAuxPowProofOfWork(const CBlockHeader& block, const Consensus::Params& 
                      __func__, block.GetChainId(),
                      params.nAuxpowChainId, block.nVersion);
 
-       
-
     /* If there is no auxpow, just check the block hash.  */
     if (!block.auxpow) {
-        if (block.IsAuxpow()) {
+        if (block.IsAuxpow())
             return error("%s : no auxpow on block with auxpow version",
                          __func__);
-        }
 
         // We have to patch this because Dogecoin genesis block is invalid.
         if(block.GetHash() == params.hashGenesisBlock && block.IsLegacy())
@@ -146,9 +142,8 @@ bool CheckAuxPowProofOfWork(const CBlockHeader& block, const Consensus::Params& 
             return true;
         }
 
-        if (!CheckProofOfWork(block.GetPoWHash(), block.nBits, params)) {
+        if (!CheckProofOfWork(block.GetPoWHash(), block.nBits, params))
             return error("%s : non-AUX proof of work failed", __func__);
-        }
 
         return true;
     }
