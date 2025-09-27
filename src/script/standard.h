@@ -8,7 +8,6 @@
 
 #include "script/interpreter.h"
 #include "uint256.h"
-#include "chainparams.h"
 
 #include <boost/variant.hpp>
 
@@ -74,7 +73,6 @@ typedef boost::variant<CNoDestination, CKeyID, CScriptID> CTxDestination;
 const char* GetTxnOutputType(txnouttype t);
 
 bool Solver(const CScript& scriptPubKey, txnouttype& typeRet, std::vector<std::vector<unsigned char> >& vSolutionsRet);
-std::string EncodeDestination(const CTxDestination& dest, const CChainParams& params);
 bool ExtractDestination(const CScript& scriptPubKey, CTxDestination& addressRet);
 bool ExtractDestinations(const CScript& scriptPubKey, txnouttype& typeRet, std::vector<CTxDestination>& addressRet, int& nRequiredRet);
 

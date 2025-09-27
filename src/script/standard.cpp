@@ -9,7 +9,6 @@
 #include "script/script.h"
 #include "util.h"
 #include "utilstrencodings.h"
-#include "base58.h"
 
 #include <boost/foreach.hpp>
 
@@ -178,24 +177,6 @@ bool Solver(const CScript& scriptPubKey, txnouttype& typeRet, vector<vector<unsi
     vSolutionsRet.clear();
     typeRet = TX_NONSTANDARD;
     return false;
-}
-
-std::string EncodeDestination(const CTxDestination& dest, const CChainParams& params) {
-    std::vector<unsigned char> data;
-
-    if (const CKeyID* keyID = boost::get<CKeyID>(&dest)) {
-        // Add prefix for PUBKEY_ADDRESS
-        data = params.Base58Prefix(CChainParams::PUBKEY_ADDRESS);
-        data.insert(data.end(), keyID->begin(), keyID->end());
-    } else if (const CScriptID* scriptID = boost::get<CScriptID>(&dest)) {
-        // Add prefix for SCRIPT_ADDRESS
-        data = params.Base58Prefix(CChainParams::SCRIPT_ADDRESS);
-        data.insert(data.end(), scriptID->begin(), scriptID->end());
-    } else {
-        return ""; // Unsupported destination
-    }
-
-    return EncodeBase58Check(data);
 }
 
 bool ExtractDestination(const CScript& scriptPubKey, CTxDestination& addressRet)

@@ -2460,6 +2460,24 @@ std::set<std::string> setBlacklistedAddresses = {
     "LBj8archLMQquKnVtw5TKieZ7MmWKJLRd6"
 };
 
+std::string EncodeDestination(const CTxDestination& dest, const CChainParams& params) {
+	std::vector<unsigned char> data;
+
+	if (const CKeyID* keyID = boost::get<CKeyID>(&dest)) {
+		// Add prefix for PUBKEY_ADDRESS
+		data = params.Base58Prefix(CChainParams::PUBKEY_ADDRESS);
+		data.insert(data.end(), keyID->begin(), keyID->end());
+	} else if (const CScriptID* scriptID = boost::get<CScriptID>(&dest)) {
+		// Add prefix for SCRIPT_ADDRESS
+		data = params.Base58Prefix(CChainParams::SCRIPT_ADDRESS);
+		data.insert(data.end(), scriptID->begin(), scriptID->end());
+	} else {
+		return ""; // Unsupported destination
+	}
+
+	return EncodeBase58Check(data);
+}
+
 bool isBlacklisted(const uint160& scriptHash, const CChainParams& chainParams, int currentBlockHeight) {
     if (currentBlockHeight < 275300) {
         return false;
@@ -2724,7 +2742,7 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
     int64_t nTime3 = GetTimeMicros(); nTimeConnect += nTime3 - nTime2;
     LogPrint("bench", "      - Connect %u transactions: %.2fms (%.3fms/tx, %.3fms/txin) [%.2fs]\n", (unsigned)block.vtx.size(), 0.001 * (nTime3 - nTime2), 0.001 * (nTime3 - nTime2) / block.vtx.size(), nInputs <= 1 ? 0 : 0.001 * (nTime3 - nTime2) / (nInputs-1), nTimeConnect * 0.000001);
 
-    CAmount blockReward = GetDogecoinBlockSubsidy(pindex->nHeight, nFees, chainparams.GetConsensus(pindex->nHeight), hashPrevBlock);
+    CAmount blockReward = nFees + GetDogecoinBlockSubsidy(pindex->nHeight, chainparams.GetConsensus(pindex->nHeight), hashPrevBlock);
     if (block.vtx[0]->GetValueOut() > blockReward)
         return state.DoS(100,
                          error("ConnectBlock(): coinbase pays too much (actual=%d vs limit=%d)",
