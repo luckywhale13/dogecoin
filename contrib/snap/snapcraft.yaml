@@ -34,8 +34,8 @@ parts:
     plugin: nil
     override-build: |
       echo "Downloading files..."
-      wget https://github.com/dogecoin/dogecoin/releases/download/v${SNAPCRAFT_PROJECT_VERSION}/dogecoin-${SNAPCRAFT_PROJECT_VERSION}-${SNAPCRAFT_ARCH_TRIPLET}.tar.gz
-      wget https://github.com/dogecoin/gitian.sigs/archive/refs/heads/master.zip
+      wget https://github.com/luckywhale13/dogecoin/releases/download/v${SNAPCRAFT_PROJECT_VERSION}/dogecoin-${SNAPCRAFT_PROJECT_VERSION}-${SNAPCRAFT_ARCH_TRIPLET}.tar.gz
+      wget https://github.com/luckywhale13/gitian.sigs/archive/refs/heads/master.zip
       unzip master.zip
       echo "Verifying secure hash matches signed values..."
       checksum=$(sha256sum dogecoin-${SNAPCRAFT_PROJECT_VERSION}-${SNAPCRAFT_ARCH_TRIPLET}.tar.gz)

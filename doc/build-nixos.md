@@ -1,5 +1,5 @@
-## NixOS build guide
-
+NixOS build guide
+------------------------------
 This guide lists the steps necessary to setup and build a full GUI distribution
 of the latest changes on NixOS.
 

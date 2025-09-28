@@ -48,10 +48,9 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
 
     // Only change once per difficulty adjustment interval
     bool fNewDifficultyProtocol = (pindexLast->nHeight+1 >= 69360);
-
-    const int64_t nTargetTimespanCurrent = fNewDifficultyProtocol ? params.nPowTargetTimespan : (params.nPowTargetTimespan*12);
-    const int64_t difficultyAdjustmentInterval = nTargetTimespanCurrent / params.nPowTargetSpacing;
-
+    const int64_t difficultyAdjustmentInterval = fNewDifficultyProtocol
+                                               ? params.DifficultyAdjustmentInterval()
+                                               : 12 * params.DifficultyAdjustmentInterval();
     //const int64_t difficultyAdjustmentInterval = fNewDifficultyProtocol
     //                                             ? 1
     //                                             : params.DifficultyAdjustmentInterval();
@@ -88,7 +87,7 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     const CBlockIndex* pindexFirst = pindexLast->GetAncestor(nHeightFirst);
     assert(pindexFirst);
 
-    return CalculateDogecoinNextWorkRequired(fNewDifficultyProtocol, nTargetTimespanCurrent, pindexLast, pindexFirst->GetBlockTime(), params);
+    return CalculateDogecoinNextWorkRequired(pindexLast, pindexFirst->GetBlockTime(), params);
 }
 
 unsigned int CalculateNextWorkRequired(const CBlockIndex* pindexLast, int64_t nFirstBlockTime, const Consensus::Params& params)

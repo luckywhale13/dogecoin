@@ -31,8 +31,8 @@ If you're using the automated script (found in [contrib/gitian-build.sh](/contri
 Check out the source code in the following directory hierarchy.
 
     cd /path/to/your/toplevel/build
-    git clone https://github.com/dogecoin-core/gitian.sigs.git
-    git clone https://github.com/dogecoin-core/dogecoin-detached-sigs.git
+    git clone https://github.com/luckywhale13-core/gitian.sigs.git
+    git clone https://github.com/luckywhale13-core/dogecoin-detached-sigs.git
     git clone https://github.com/devrandom/gitian-builder.git
     git clone https://github.com/luckywhale13/dogecoin.git
 

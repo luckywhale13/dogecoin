@@ -1,10 +1,10 @@
-# Mac OS X Build Instructions and Notes
-
+Mac OS X Build Instructions and Notes
+====================================
 The commands in this guide should be executed in a Terminal application.
 The built-in one is located in `/Applications/Utilities/Terminal.app`.
 
-## Preparation
-
+Preparation
+-----------
 Install the OS X command line tools:
 
 `xcode-select --install`
@@ -13,7 +13,8 @@ When the popup appears, click `Install`.
 
 Then install [Homebrew](https://brew.sh).
 
-## Dependencies
+Dependencies
+----------------------
 
     brew install automake libtool boost miniupnpc openssl pkg-config protobuf qt5 libevent
     brew install berkeley-db # You need to make sure you install a version >= 5.3.28, but as close to 5.3.28 as possible. Check the homebrew docs to find out how to install older versions.
@@ -24,14 +25,15 @@ If you want to build the disk image with `make deploy` (.dmg / optional), you ne
 
 NOTE: Building with Qt4 is still supported, however, could result in a broken UI. Building with Qt5 is recommended.
 
-## Build Dogecoin Core
+Build Dogecoin Core
+------------------------
 
-1.  Clone the dogecoin source code and cd into `dogecoin`
+1. Clone the dogecoin source code and cd into `dogecoin`
 
         git clone https://github.com/luckywhale13/dogecoin
         cd dogecoin
 
-2.  Build Dogecoin:
+2.  Build dogecoin:
 
     Configure and build the headless dogecoin binaries as well as the GUI (if Qt is found).
 
@@ -49,7 +51,8 @@ NOTE: Building with Qt4 is still supported, however, could result in a broken UI
 
         make deploy
 
-## Running
+Running
+-------
 
 Dogecoin Core is now available at `./src/dogecoind`
 
@@ -65,14 +68,15 @@ You can monitor the download process by looking at the debug.log file:
 
     tail -f $HOME/Library/Application\ Support/Dogecoin/debug.log
 
-## Other commands:
+Other commands:
+-------
 
     ./src/dogecoind -daemon # Starts the dogecoin daemon.
     ./src/dogecoin-cli --help # Outputs a list of command-line options.
     ./src/dogecoin-cli help # Outputs a list of RPC commands when the daemon is running.
 
-## Using Qt Creator as IDE
-
+Using Qt Creator as IDE
+------------------------
 You can use Qt Creator as an IDE, for dogecoin development.
 Download and install the community edition of [Qt Creator](https://www.qt.io/download/).
 Uncheck everything except Qt Creator during the installation process.
@@ -88,8 +92,9 @@ Uncheck everything except Qt Creator during the installation process.
 9. Select LLDB as debugger (you might need to set the path to your installation)
 10. Start debugging with Qt Creator
 
-## Notes
+Notes
+-----
 
-- Tested on OS X 10.8 through 10.12 on 64-bit Intel processors only.
+* Tested on OS X 10.8 through 10.12 on 64-bit Intel processors only.
 
-- Building with downloaded Qt binaries is not officially supported. See the notes in [#7714](https://github.com/luckywhale13/dogecoin/issues/7714)
+* Building with downloaded Qt binaries is not officially supported. See the notes in [#7714](https://github.com/luckywhale13/dogecoin/issues/7714)

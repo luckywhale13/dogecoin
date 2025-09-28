@@ -1,4 +1,5 @@
-## Arch Linux build guide
+Arch Linux build guide
+----------------------
 
 **Last tested with:** 1.14.6-dev (as of 22884709)
 **Test date:** 2022/07/15

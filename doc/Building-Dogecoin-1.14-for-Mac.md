@@ -10,7 +10,7 @@ Tested on OSX 10.11 El Capitan, 10.13 High Sierra and 11.1 Big Sur.
 
 For this purpose, just indicating the 1.14-branding branch in my repo.
 
-	$git clone -b 1.14-branding --single-branch https://github.com/luckywhale13/dogecoin.git
+	$git clone -b 1.14-branding --single-branch https://github.com/michilumin/dogecoin.git
 
 ### Set up OSX basic build dependencies. ##
 

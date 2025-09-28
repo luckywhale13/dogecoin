@@ -82,9 +82,8 @@ struct Params {
 
     /** Auxpow parameters */
     int32_t nAuxpowChainId;
-    int nAuxpowStartHeight;
-    int nBlockAfterAuxpowRewardThreshold;
     bool fStrictChainId;
+	int nAuxpowStartHeight;
 
     /** Height-aware consensus parameters */
     uint32_t nHeightEffective; // When these parameters come into use

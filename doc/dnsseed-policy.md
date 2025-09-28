@@ -51,4 +51,4 @@ situations but should be discussed in public in advance.
 
 See also
 ----------
-- [dogecoin-seeder](https://github.com/luckywhale13/dogecoin-seeder) is a reference implementation of a DNS seed.
+- [dogecoin-seeder](https://github.com/langerhans/dogecoin-seeder) is a reference implementation of a DNS seed.

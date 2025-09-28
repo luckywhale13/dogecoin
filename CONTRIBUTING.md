@@ -6,7 +6,7 @@ or look for work that needs doing, please see:
 
 * [Help requests](https://github.com/luckywhale13/dogecoin/labels/help%20wanted)
 * [Projects](https://github.com/luckywhale13/dogecoin/projects)
-* [dogecoindev on reddit](https://www.reddit.com/r/dogecoindev/)
+* [Dogecoindev on reddit](https://www.reddit.com/r/dogecoindev/)
 
 ## Branch Strategy
 
