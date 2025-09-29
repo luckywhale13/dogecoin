@@ -5,7 +5,6 @@
 #include "amount.h"
 #include "chain.h"
 #include "chainparams.h"
-#include "util.h"
 
 bool AllowDigishieldMinDifficultyForBlock(const CBlockIndex* pindexLast, const CBlockHeader *pblock, const Consensus::Params& params);
 CAmount GetDogecoinBlockSubsidy(int nHeight, const Consensus::Params& consensusParams, uint256 prevHash);

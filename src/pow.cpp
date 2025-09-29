@@ -22,7 +22,7 @@ bool AllowMinDifficultyForBlock(const CBlockIndex* pindexLast, const CBlockHeade
 
     // Dogecoin: Magic number at which reset protocol switches
     // check if we allow minimum difficulty at this block-height
-    if ((unsigned)pindexLast->nHeight < params.nHeightEffective)
+    if ((uint32_t)pindexLast->nHeight < params.nHeightEffective)
         return false;
 
     // Allow for a minimum block time if the elapsed time > 2*nTargetSpacing
@@ -49,8 +49,12 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     // Only change once per difficulty adjustment interval
     bool fNewDifficultyProtocol = (pindexLast->nHeight+1 >= 69360);
     const int64_t difficultyAdjustmentInterval = fNewDifficultyProtocol
-                                               ? params.DifficultyAdjustmentInterval()
-                                               : 12 * params.DifficultyAdjustmentInterval();
+                                                 ? 20
+                                                 : params.DifficultyAdjustmentInterval();
+	//const int64_t difficultyAdjustmentInterval = params.DifficultyAdjustmentInterval(); \\ digishield active
+	//const int64_t difficultyAdjustmentInterval = fNewDifficultyProtocol
+	//										   ? params.DifficultyAdjustmentInterval()
+	//										   : params.DifficultyAdjustmentInterval();
     //const int64_t difficultyAdjustmentInterval = fNewDifficultyProtocol
     //                                             ? 1
     //                                             : params.DifficultyAdjustmentInterval();

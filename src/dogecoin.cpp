@@ -30,7 +30,7 @@ bool AllowDigishieldMinDifficultyForBlock(const CBlockIndex* pindexLast, const C
         return false;
 
     // check if the chain allows minimum difficulty blocks on recalc blocks
-    if ((unsigned)pindexLast->nHeight < params.nHeightEffective)
+    if ((uint32_t)pindexLast->nHeight < params.nHeightEffective) // always false
     // if (!params.fPowAllowDigishieldMinDifficultyBlocks)
         return false;
 
@@ -41,52 +41,19 @@ bool AllowDigishieldMinDifficultyForBlock(const CBlockIndex* pindexLast, const C
 unsigned int CalculateDogecoinNextWorkRequired(const CBlockIndex* pindexLast, int64_t nFirstBlockTime, const Consensus::Params& params)
 {
     int nHeight = pindexLast->nHeight + 1;
-	bool fNewDifficultyProtocol = (pindexLast->nHeight+1 >= 69360);
-
-	const int64_t nTargetTimespanCurrent = fNewDifficultyProtocol ? params.nPowTargetTimespan : (params.nPowTargetTimespan*12);
-	//const int64_t difficultyAdjustmentInterval = nTargetTimespanCurrent / params.nPowTargetSpacing;
-
-    int64_t nActualTimespanMin = fNewDifficultyProtocol ? (nTargetTimespanCurrent - nTargetTimespanCurrent/4) : (nTargetTimespanCurrent/4);
-    int64_t nActualTimespanMax = fNewDifficultyProtocol ? (nTargetTimespanCurrent + nTargetTimespanCurrent/4) : (nTargetTimespanCurrent*4);
-
-    int64_t nActualTimespan = pindexLast->GetBlockTime() - nFirstBlockTime;
-
-    if(nHeight > 10000)
-    {
-        if (nActualTimespan < nActualTimespanMin)
-            nActualTimespan = nActualTimespanMin;
-        if (nActualTimespan > nActualTimespanMax)
-            nActualTimespan = nActualTimespanMax;
-    }
-    else if(nHeight > 5000)
-    {
-        if (nActualTimespan < nActualTimespanMin/2)
-            nActualTimespan = nActualTimespanMin/2;
-        if (nActualTimespan > nActualTimespanMax)
-            nActualTimespan = nActualTimespanMax;
-    }
-    else
-    {
-        if (nActualTimespan < nActualTimespanMin/4)
-            nActualTimespan = nActualTimespanMin/4;
-        if (nActualTimespan > nActualTimespanMax)
-            nActualTimespan = nActualTimespanMax;
-    }
-
-    //const int64_t retargetTimespan = params.nPowTargetTimespan;
-    /*
-
+    const int64_t retargetTimespan = params.nPowTargetTimespan;
+    const int64_t nActualTimespan = pindexLast->GetBlockTime() - nFirstBlockTime;
     int64_t nModulatedTimespan = nActualTimespan;
     int64_t nMaxTimespan;
     int64_t nMinTimespan;
 
-    if (params.fDigishieldDifficultyCalculation && params.nHeightEffective <= nHeight) //DigiShield implementation - thanks to RealSolid & WDC for this code
+    if (params.fDigishieldDifficultyCalculation) //DigiShield implementation - thanks to RealSolid & WDC for this code
     {
         // amplitude filter - thanks to daft27 for this code
-        nModulatedTimespan = retargetTimespan + (nModulatedTimespan - retargetTimespan) / 8;
+        //nModulatedTimespan = retargetTimespan + (nModulatedTimespan - retargetTimespan) / 8;
 
         nMinTimespan = retargetTimespan - (retargetTimespan / 4);
-        nMaxTimespan = retargetTimespan + (retargetTimespan / 2);
+        nMaxTimespan = retargetTimespan + (retargetTimespan / 4);
     } else if (nHeight > 10000) {
         nMinTimespan = retargetTimespan / 4;
         nMaxTimespan = retargetTimespan * 4;
@@ -102,19 +69,16 @@ unsigned int CalculateDogecoinNextWorkRequired(const CBlockIndex* pindexLast, in
     if (nModulatedTimespan < nMinTimespan)
         nModulatedTimespan = nMinTimespan;
     else if (nModulatedTimespan > nMaxTimespan)
-        nModulatedTimespan = nMaxTimespan;*/
+        nModulatedTimespan = nMaxTimespan;
 
     // Retarget
     const arith_uint256 bnPowLimit = UintToArith256(params.powLimit);
     arith_uint256 bnNew;
-    //arith_uint256 bnOld;
+    arith_uint256 bnOld;
     bnNew.SetCompact(pindexLast->nBits);
-    bnNew *= nActualTimespan;
-    bnNew /= nTargetTimespanCurrent;
-
-    //bnOld = bnNew;
-    //bnNew *= nModulatedTimespan;
-    //bnNew /= retargetTimespan;
+    bnOld = bnNew;
+    bnNew *= nModulatedTimespan;
+    bnNew /= retargetTimespan;
 
     if (bnNew > bnPowLimit)
         bnNew = bnPowLimit;
@@ -227,7 +191,7 @@ CAmount GetDogecoinBlockSubsidy(int nHeight, const Consensus::Params& consensusP
             nSubsidy = 5888 * COIN;
     } else {
         // Subsidy is cut in half every 100,000 blocks, which will occur approximately every 2 months
-        nSubsidy >>= (nHeight / 100000); // Dogecoin: 100K blocks in ~2 months
+        nSubsidy >>= (nHeight / consensusParams.nSubsidyHalvingInterval); // Dogecoin: 100K blocks in ~2 months
 
         std::string cseed_str = prevHash.ToString().substr(8,7);
         const char* cseed = cseed_str.c_str();

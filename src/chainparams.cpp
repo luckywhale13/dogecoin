@@ -71,12 +71,11 @@ class CMainParams : public CChainParams {
 private:
     Consensus::Params digishieldConsensus;
     Consensus::Params auxpowConsensus;
-    Consensus::Params minDifficultyConsensus;
 public:
     CMainParams() {
         strNetworkID = "main";
 
-        // Not used in Dogecoin
+        // Blocks 0 - 69359 are conventional difficulty calculation
         consensus.nSubsidyHalvingInterval = 100000;
         consensus.nMajorityEnforceBlockUpgrade = 1500;
         consensus.nMajorityRejectBlockOutdated = 1900;
@@ -86,11 +85,13 @@ public:
         consensus.BIP34Hash = uint256S("0x9b7bce58999062b63bfb18586813c42491fa32f4591d8d3043cb4fa9e551541b");
         consensus.BIP65Height = 0x210c; // 8460?
         consensus.BIP66Height = 0x210c; // 8460?
-
         consensus.powLimit = uint256S("0x00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // ~uint256(0) >> 20;
-        consensus.nPowTargetTimespan = 20 * 60; // pre-digishield: 20 minutes
+        consensus.nPowTargetTimespan = 4 * 60 * 60; // pre-digishield: 4 hours
         consensus.nPowTargetSpacing = 60; // 1 minute
-        consensus.nCoinbaseMaturity = 90;
+        consensus.fDigishieldDifficultyCalculation = false;
+        consensus.nCoinbaseMaturity = 70;
+        consensus.fPowAllowMinDifficultyBlocks = false;
+        consensus.fPowAllowDigishieldMinDifficultyBlocks = false;
         consensus.fPowNoRetargeting = false;
         consensus.nRuleChangeActivationThreshold = 9576; // 95% of 10,080
         consensus.nMinerConfirmationWindow = 10080; // 60 * 24 * 7 = 10,080 blocks, or one week
@@ -129,27 +130,22 @@ public:
 
         // AuxPoW parameters
         consensus.nAuxpowChainId = 0x2013;
-        consensus.nAuxpowStartHeight = 176000; // -1 will always allow legacy blocks
         consensus.fStrictChainId = true;
-
-        // We do not activate digishield in this consensus
+        consensus.fAllowLegacyBlocks = true;
+        consensus.nHeightEffective = 0;
+ 
+        // Blocks 69360 - 175999 are Digishield without AuxPoW
         digishieldConsensus = consensus;
-        digishieldConsensus.nHeightEffective = 0xFFFFFFFF; // like never
-
-        digishieldConsensus.fSimplifiedRewards = true;
+        digishieldConsensus.nHeightEffective = 69360;
+        digishieldConsensus.fSimplifiedRewards = false;
         digishieldConsensus.fDigishieldDifficultyCalculation = true;
-        digishieldConsensus.nPowTargetTimespan = 60; // post-digishield: 1 minute
+        digishieldConsensus.nPowTargetTimespan = 20 * 60; // post-digishield: 20 minute
         digishieldConsensus.nCoinbaseMaturity = 70;
 
-        // Not implementing digishield yet
-        minDifficultyConsensus = digishieldConsensus;
-        minDifficultyConsensus.nHeightEffective = std::numeric_limits<uint32_t>::max();;
-        minDifficultyConsensus.fPowAllowDigishieldMinDifficultyBlocks = true;
-        minDifficultyConsensus.fPowAllowMinDifficultyBlocks = false;
-
-        // Not implementing AuxPow hardfork yet
+        // Blocks 176000+ are AuxPoW
         auxpowConsensus = digishieldConsensus;
-        auxpowConsensus.nHeightEffective = std::numeric_limits<uint32_t>::max();
+        auxpowConsensus.nHeightEffective = 176000;
+        auxpowConsensus.fAllowLegacyBlocks = false;
 
         // Assemble the binary search tree of consensus parameters
         pConsensusRoot = &digishieldConsensus;
@@ -297,8 +293,8 @@ public:
 
         // AuxPoW parameters
         consensus.nAuxpowChainId = 0x0062;
-        consensus.nAuxpowStartHeight = 0; // -1 will always allow legacy blocks
         consensus.fStrictChainId = true;
+        //consensus.nAuxpowStartHeight = 0; // -1 will always allow legacy blocks
 
         // We do not activate digishield in this consensus
         digishieldConsensus = consensus;
@@ -447,8 +443,8 @@ public:
 
         // AuxPoW parameters
         consensus.nAuxpowChainId = 0x0062;
-        consensus.nAuxpowStartHeight = 0; // -1 will always allow legacy blocks
-        consensus.fStrictChainId = true;
+		consensus.fStrictChainId = true;
+        //consensus.nAuxpowStartHeight = 0; // -1 will always allow legacy blocks
 
         // We do not activate digishield in this consensus
         digishieldConsensus = consensus;

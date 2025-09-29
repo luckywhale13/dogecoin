@@ -1003,9 +1003,8 @@ void AuxMiningCheck()
        past the point of merge-mining start.  Check nevertheless.  */
     {
         LOCK(cs_main);
-        const auto auxpowStart = Params().GetConsensus(chainActive.Height() + 1).nAuxpowStartHeight;
-        if (chainActive.Height() + 1 < auxpowStart)
-            throw std::runtime_error("getauxblock method will be available after block " + std::to_string(auxpowStart));
+        if (Params().GetConsensus(chainActive.Height() + 1).fAllowLegacyBlocks)
+            throw std::runtime_error("getauxblock method is not yet available");
     }
 }
 

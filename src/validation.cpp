@@ -3824,14 +3824,16 @@ bool ContextualCheckBlockHeader(const CBlockHeader& block, CValidationState& sta
     const Consensus::Params& consensusParams = Params().GetConsensus(nHeight);
 
     // Disallow legacy blocks after merge-mining start.
-    if (!consensusParams.AllowLegacyBlocks(nHeight)
+    if (!consensusParams.fAllowLegacyBlocks
         && block.IsLegacy())
         return state.DoS(100, error("%s : legacy block after auxpow start",
                                     __func__),
                          REJECT_INVALID, "late-legacy-block");
 
-    // Disallow auxpow blocks before merge-mining start.
-    if (consensusParams.AllowLegacyBlocks(nHeight)
+    // Dogecoin: Disallow AuxPow blocks before it is activated.
+    // TODO: Remove this test, as checkpoints will enforce this for us now
+    // NOTE: Previously this had its own fAllowAuxPoW flag, but that's always the opposite of fAllowLegacyBlocks
+    if (consensusParams.fAllowLegacyBlocks
         && block.IsAuxpow())
         return state.DoS(100, error("%s : auxpow blocks are not allowed at height %d, parameters effective from %d",
                                     __func__, pindexPrev->nHeight + 1, consensusParams.nHeightEffective),
