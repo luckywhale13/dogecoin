@@ -51,13 +51,6 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     const int64_t difficultyAdjustmentInterval = fNewDifficultyProtocol
                                                  ? 20
                                                  : params.DifficultyAdjustmentInterval();
-	//const int64_t difficultyAdjustmentInterval = params.DifficultyAdjustmentInterval(); \\ digishield active
-	//const int64_t difficultyAdjustmentInterval = fNewDifficultyProtocol
-	//										   ? params.DifficultyAdjustmentInterval()
-	//										   : params.DifficultyAdjustmentInterval();
-    //const int64_t difficultyAdjustmentInterval = fNewDifficultyProtocol
-    //                                             ? 1
-    //                                             : params.DifficultyAdjustmentInterval();
     if ((pindexLast->nHeight+1) % difficultyAdjustmentInterval != 0)
     {
         if (params.fPowAllowMinDifficultyBlocks)
