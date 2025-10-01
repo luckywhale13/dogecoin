@@ -81,10 +81,10 @@ public:
         consensus.nMajorityRejectBlockOutdated = 1900;
         consensus.nMajorityWindow = 2000;
         // After deployments are activated we can change it
-        consensus.BIP34Height = 81744;
-        consensus.BIP34Hash = uint256S("0x93a7660b2fd31f2a1a5578ff2af8078a9256be75928d55a88184f355679bb7c5"); // 81744
-        consensus.BIP65Height = 81744;
-        consensus.BIP66Height = 81744;
+        consensus.BIP34Height = 95551;
+        consensus.BIP34Hash = uint256S("0xd45224f678ed82cf7378e684fa6dc020ec35fd3360059f16d058200dbd0cc3d6"); // 95551
+        consensus.BIP65Height = 95551;
+        consensus.BIP66Height = 95551;
         consensus.powLimit = uint256S("0x00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"); // ~uint256(0) >> 20;
         consensus.nPowTargetTimespan = 4 * 60 * 60; // pre-digishield: 4 hours
         consensus.nPowTargetSpacing = 60; // 1 minute
@@ -114,7 +114,7 @@ public:
         consensus.nMinimumChainWork = uint256S("0x000000000000000000000000000000000000000000000c6764d4993a848f6f28"); // 620035
 
         // By default assume that the signatures in ancestors of this block are valid.
-        consensus.defaultAssumeValid = uint256S("0x93a7660b2fd31f2a1a5578ff2af8078a9256be75928d55a88184f355679bb7c5"); // 81744
+        consensus.defaultAssumeValid = uint256S("0xd45224f678ed82cf7378e684fa6dc020ec35fd3360059f16d058200dbd0cc3d6"); // 95551
 
         // AuxPoW parameters
         consensus.nAuxpowChainId = 0x2013;
