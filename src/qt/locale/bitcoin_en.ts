@@ -4446,7 +4446,7 @@ p, li { white-space: pre-wrap; }
     <name>bitcoin-core</name>
     <message>
         <location filename="../bitcoinstrings.cpp" line="+12"/>
-        <source>Dogecoin Core</source>
+        <source>Luckycoin Core</source>
         <translation type="unfinished">Luckycoin Core</translation>
     </message>
     <message>
