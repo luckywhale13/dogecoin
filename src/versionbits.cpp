@@ -12,18 +12,6 @@ const struct BIP9DeploymentInfo VersionBitsDeploymentInfo[Consensus::MAX_VERSION
         /*.gbt_force =*/ true,
     },
     {
-        /*.name =*/ "bip34",
-        /*.gbt_force =*/ true,
-    },
-    {
-        /*.name =*/ "bip66",
-        /*.gbt_force =*/ true,
-    },
-    {
-        /*.name =*/ "bip65",
-        /*.gbt_force =*/ true,
-    },    
-    {
         /*.name =*/ "csv",
         /*.gbt_force =*/ true,
     },
