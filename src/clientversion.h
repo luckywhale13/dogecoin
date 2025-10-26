@@ -27,11 +27,7 @@
  * Copyright year (2009-this)
  * Todo: update this when changing our copyright comments in the source
  */
-<<<<<<< HEAD
-#define COPYRIGHT_YEAR 2024
-=======
 #define COPYRIGHT_YEAR 2025
->>>>>>> luckycoin-patch
 
 #endif //HAVE_CONFIG_H
 
