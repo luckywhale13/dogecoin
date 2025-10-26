@@ -108,6 +108,8 @@ enum
     SCRIPT_VERIFY_WITNESS_PUBKEYTYPE = (1U << 15),
 };
 
+static const uint256 CHAIN_ID = uint256S("0x4c55434b59434f494e5f5245564956414c"); // "dogecoin_REVIVAL" (to avoid replay attacks)
+
 bool CheckSignatureEncoding(const std::vector<unsigned char> &vchSig, unsigned int flags, ScriptError* serror);
 
 struct PrecomputedTransactionData
@@ -123,7 +125,16 @@ enum SigVersion
     SIGVERSION_WITNESS_V0 = 1,
 };
 
-uint256 SignatureHash(const CScript &scriptCode, const CTransaction& txTo, unsigned int nIn, int nHashType, const CAmount& amount, SigVersion sigversion, const PrecomputedTransactionData* cache = NULL);
+enum ChainSigVersion {
+    CHAINSIG_VERSION_START = 0,
+
+    CHAINSIG_VERSION_ORIGINAL_UNSAFE_DEPRECATED = CHAINSIG_VERSION_START,
+    CHAINSIG_VERSION_REVIVAL,
+
+    CHAINSIG_VERSION_LATEST = CHAINSIG_VERSION_REVIVAL
+};
+
+uint256 SignatureHash(const CScript &scriptCode, const CTransaction& txTo, unsigned int nIn, int nHashType, const CAmount& amount, SigVersion sigversion, ChainSigVersion chainSigVersion = CHAINSIG_VERSION_LATEST, const PrecomputedTransactionData* cache = NULL);
 
 class BaseSignatureChecker
 {
@@ -153,13 +164,14 @@ private:
     unsigned int nIn;
     const CAmount amount;
     const PrecomputedTransactionData* txdata;
+    const ChainSigVersion chainSigVersion;
 
 protected:
     virtual bool VerifySignature(const std::vector<unsigned char>& vchSig, const CPubKey& vchPubKey, const uint256& sighash) const;
 
 public:
-    TransactionSignatureChecker(const CTransaction* txToIn, unsigned int nInIn, const CAmount& amountIn) : txTo(txToIn), nIn(nInIn), amount(amountIn), txdata(NULL) {}
-    TransactionSignatureChecker(const CTransaction* txToIn, unsigned int nInIn, const CAmount& amountIn, const PrecomputedTransactionData& txdataIn) : txTo(txToIn), nIn(nInIn), amount(amountIn), txdata(&txdataIn) {}
+    TransactionSignatureChecker(const CTransaction* txToIn, unsigned int nInIn, const CAmount& amountIn, ChainSigVersion chainSigVersion = CHAINSIG_VERSION_LATEST) : txTo(txToIn), nIn(nInIn), amount(amountIn), txdata(NULL), chainSigVersion(chainSigVersion) {}
+    TransactionSignatureChecker(const CTransaction* txToIn, unsigned int nInIn, const CAmount& amountIn, const PrecomputedTransactionData& txdataIn, ChainSigVersion chainSigVersion = CHAINSIG_VERSION_LATEST) : txTo(txToIn), nIn(nInIn), amount(amountIn), txdata(&txdataIn), chainSigVersion(chainSigVersion) {}
     bool CheckSig(const std::vector<unsigned char>& scriptSig, const std::vector<unsigned char>& vchPubKey, const CScript& scriptCode, SigVersion sigversion) const;
     bool CheckLockTime(const CScriptNum& nLockTime) const;
     bool CheckSequence(const CScriptNum& nSequence) const;
@@ -171,8 +183,8 @@ private:
     const CTransaction txTo;
 
 public:
-    MutableTransactionSignatureChecker(const CMutableTransaction* txToIn, unsigned int nInIn, const CAmount& amount) : TransactionSignatureChecker(&txTo, nInIn, amount), txTo(*txToIn) {}
-};
+    MutableTransactionSignatureChecker(const CMutableTransaction* txToIn, unsigned int nInIn, const CAmount& amount, ChainSigVersion chainSigVersion = CHAINSIG_VERSION_LATEST) : TransactionSignatureChecker(&txTo, nInIn, amount, chainSigVersion), txTo(*txToIn) {}
+}; 
 
 bool EvalScript(std::vector<std::vector<unsigned char> >& stack, const CScript& script, unsigned int flags, const BaseSignatureChecker& checker, SigVersion sigversion, ScriptError* error = NULL);
 bool VerifyScript(const CScript& scriptSig, const CScript& scriptPubKey, const CScriptWitness* witness, unsigned int flags, const BaseSignatureChecker& checker, ScriptError* serror = NULL);

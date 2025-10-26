@@ -805,7 +805,7 @@ int nMaxConnections;
 int nUserMaxConnections;
 int nFD;
 int nAvailableFds;
-ServiceFlags nLocalServices = NODE_NETWORK;
+ServiceFlags nLocalServices = ServiceFlags(NODE_NETWORK | NODE_SIGREVIVAL);
 
 }
 

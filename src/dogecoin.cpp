@@ -30,7 +30,7 @@ bool AllowDigishieldMinDifficultyForBlock(const CBlockIndex* pindexLast, const C
         return false;
 
     // check if the chain allows minimum difficulty blocks on recalc blocks
-    if (pindexLast->nHeight < 157500)
+    if ((uint32_t)pindexLast->nHeight < params.nHeightEffective) // always false
     // if (!params.fPowAllowDigishieldMinDifficultyBlocks)
         return false;
 
@@ -50,10 +50,10 @@ unsigned int CalculateDogecoinNextWorkRequired(const CBlockIndex* pindexLast, in
     if (params.fDigishieldDifficultyCalculation) //DigiShield implementation - thanks to RealSolid & WDC for this code
     {
         // amplitude filter - thanks to daft27 for this code
-        nModulatedTimespan = retargetTimespan + (nModulatedTimespan - retargetTimespan) / 8;
+        //nModulatedTimespan = retargetTimespan + (nModulatedTimespan - retargetTimespan) / 8;
 
         nMinTimespan = retargetTimespan - (retargetTimespan / 4);
-        nMaxTimespan = retargetTimespan + (retargetTimespan / 2);
+        nMaxTimespan = retargetTimespan + (retargetTimespan / 4);
     } else if (nHeight > 10000) {
         nMinTimespan = retargetTimespan / 4;
         nMaxTimespan = retargetTimespan * 4;
@@ -104,6 +104,12 @@ bool CheckAuxPowProofOfWork(const CBlockHeader& block, const Consensus::Params& 
             return error("%s : no auxpow on block with auxpow version",
                          __func__);
 
+        // We have to patch this because Dogecoin genesis block is invalid.
+        if(block.GetHash() == params.hashGenesisBlock && block.IsLegacy())
+        {
+            return true;
+        }
+
         if (!CheckProofOfWork(block.GetPoWHash(), block.nBits, params))
             return error("%s : non-AUX proof of work failed", __func__);
 
@@ -123,28 +129,87 @@ bool CheckAuxPowProofOfWork(const CBlockHeader& block, const Consensus::Params& 
     return true;
 }
 
+static const long hextable[] =
+{
+		-1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+		-1, -1, -1, -1, -1, -1, -1, -1, -1, -1,		// 10-19
+		-1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+		-1, -1, -1, -1, -1, -1, -1, -1, -1, -1,		// 30-39
+		-1, -1, -1, -1, -1, -1, -1, -1,  0,  1,
+		2,  3,  4,  5,  6,  7,  8,  9, -1, -1,		// 50-59
+		-1, -1, -1, -1, -1, 10, 11, 12, 13, 14,
+		15, -1, -1, -1, -1, -1, -1, -1, -1, -1,		// 70-79
+		-1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+		-1, -1, -1, -1, -1, -1, -1, 10, 11, 12,		// 90-99
+		13, 14, 15, -1, -1, -1, -1, -1, -1, -1,
+		-1, -1, -1, -1, -1, -1, -1, -1, -1, -1,		// 110-109
+		-1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+		-1, -1, -1, -1, -1, -1, -1, -1, -1, -1,		// 130-139
+		-1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+		-1, -1, -1, -1, -1, -1, -1, -1, -1, -1,		// 150-159
+		-1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+		-1, -1, -1, -1, -1, -1, -1, -1, -1, -1,		// 170-179
+		-1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+		-1, -1, -1, -1, -1, -1, -1, -1, -1, -1,		// 190-199
+		-1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+		-1, -1, -1, -1, -1, -1, -1, -1, -1, -1,		// 210-219
+		-1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+		-1, -1, -1, -1, -1, -1, -1, -1, -1, -1,		// 230-239
+		-1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+		-1, -1, -1, -1, -1, -1
+};
+
+long hex2long(const char* hexString)
+{
+	long ret = 0;
+
+	while (*hexString && ret >= 0)
+	{
+		ret = (ret << 4) | hextable[*hexString++];
+	}
+
+	return ret;
+}
+
 CAmount GetDogecoinBlockSubsidy(int nHeight, const Consensus::Params& consensusParams, uint256 prevHash)
 {
-    int halvings = nHeight / consensusParams.nSubsidyHalvingInterval;
+    CAmount nSubsidy = 88 * COIN;
 
-    if (!consensusParams.fSimplifiedRewards)
+    if(nHeight < 50000)
     {
-        // Old-style rewards derived from the previous block hash
-        const std::string cseed_str = prevHash.ToString().substr(7, 7);
+        std::string cseed_str = prevHash.ToString().substr(8,7);
         const char* cseed = cseed_str.c_str();
-        char* endp = NULL;
-        long seed = strtol(cseed, &endp, 16);
-        CAmount maxReward = (1000000 >> halvings) - 1;
-        int rand = generateMTRandom(seed, maxReward);
+        long seed = hex2long(cseed);
 
-        return (1 + rand) * COIN;
-    } else if (nHeight < (6 * consensusParams.nSubsidyHalvingInterval)) {
-        // New-style constant rewards for each halving interval
-        return (500000 * COIN) >> halvings;
+        int rand = generateMTRandom(seed, 100000);
+
+        if(rand > 30000 && rand < 35001)
+            nSubsidy = 188 * COIN;
+        else if(rand > 70000 && rand < 71001)
+            nSubsidy = 588 * COIN;
+        else if(rand > 50000 && rand < 50011)
+            nSubsidy = 5888 * COIN;
     } else {
-        // Constant inflation
-        return 10000 * COIN;
+        // Subsidy is cut in half every 100,000 blocks, which will occur approximately every 2 months
+        int nShift = (nHeight / consensusParams.nSubsidyHalvingInterval);
+        if(nShift > 6) nShift = 6;
+        nSubsidy >>= nShift;
+
+        std::string cseed_str = prevHash.ToString().substr(8,7);
+        const char* cseed = cseed_str.c_str();
+        long seed = hex2long(cseed);
+
+        int rand = generateMTRandom(seed, 100000);
+
+        if(rand > 30000 && rand < 35001)
+            nSubsidy *= 2;
+        else if(rand > 70000 && rand < 71001)
+            nSubsidy *= 5;
+        else if(rand > 50000 && rand < 50011)
+            nSubsidy *= 58;
     }
+
+    return nSubsidy;
 }
 
 

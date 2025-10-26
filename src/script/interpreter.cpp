@@ -1175,7 +1175,7 @@ PrecomputedTransactionData::PrecomputedTransactionData(const CTransaction& txTo)
     hashOutputs = GetOutputsHash(txTo);
 }
 
-uint256 SignatureHash(const CScript& scriptCode, const CTransaction& txTo, unsigned int nIn, int nHashType, const CAmount& amount, SigVersion sigversion, const PrecomputedTransactionData* cache)
+uint256 SignatureHash(const CScript& scriptCode, const CTransaction& txTo, unsigned int nIn, int nHashType, const CAmount& amount, SigVersion sigversion, ChainSigVersion chainSigVersion, const PrecomputedTransactionData* cache)
 {
     if (sigversion == SIGVERSION_WITNESS_V0) {
         uint256 hashPrevouts;
@@ -1200,6 +1200,9 @@ uint256 SignatureHash(const CScript& scriptCode, const CTransaction& txTo, unsig
         }
 
         CHashWriter ss(SER_GETHASH, 0);
+        if (chainSigVersion >= CHAINSIG_VERSION_REVIVAL) {
+            ss << CHAIN_ID;
+        }
         // Version
         ss << txTo.nVersion;
         // Input prevouts/nSequence (none/all, depending on flags)
@@ -1241,6 +1244,9 @@ uint256 SignatureHash(const CScript& scriptCode, const CTransaction& txTo, unsig
 
     // Serialize and hash
     CHashWriter ss(SER_GETHASH, 0);
+    if (chainSigVersion >= CHAINSIG_VERSION_REVIVAL) {
+        ss << CHAIN_ID;
+    }
     ss << txTmp << nHashType;
     return ss.GetHash();
 }
@@ -1263,7 +1269,7 @@ bool TransactionSignatureChecker::CheckSig(const vector<unsigned char>& vchSigIn
     int nHashType = vchSig.back();
     vchSig.pop_back();
 
-    uint256 sighash = SignatureHash(scriptCode, *txTo, nIn, nHashType, amount, sigversion, this->txdata);
+    uint256 sighash = SignatureHash(scriptCode, *txTo, nIn, nHashType, amount, sigversion, chainSigVersion, this->txdata);
 
     if (!VerifySignature(vchSig, pubkey, sighash))
         return false;

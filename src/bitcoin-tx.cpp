@@ -517,6 +517,35 @@ static CAmount AmountFromValue(const UniValue& value)
     return amount;
 }
 
+static ChainSigVersion CurrentChainSigVersion() {
+    ChainSigVersion chainSigVersion = CHAINSIG_VERSION_REVIVAL;
+
+    if (registers.count("chainsigversion")) {
+        UniValue chainsigversion = registers["chainsigversion"];
+        if (chainsigversion.isNull()) {
+            // use default
+        } else if (chainsigversion.isNum()) {
+            int n = chainsigversion.get_int();
+            if (n < CHAINSIG_VERSION_START || n > CHAINSIG_VERSION_LATEST)
+                throw std::runtime_error("Invalid chainsigversion");
+            chainSigVersion = (ChainSigVersion) n;
+        } else if (chainsigversion.isStr()) {
+            std::string str = chainsigversion.getValStr();
+            if (str == "revival" || str == "current" || str == "default") {
+                chainSigVersion = CHAINSIG_VERSION_REVIVAL;
+            } else if (str == "original-unsafe-deprecated") {
+                chainSigVersion = CHAINSIG_VERSION_ORIGINAL_UNSAFE_DEPRECATED;
+            } else {
+                throw std::runtime_error("Invalid chainsigversion");
+            }
+        } else {
+            throw std::runtime_error("Invalid chainsigversion");
+        }
+    }
+
+    return chainSigVersion;
+}
+
 static void MutateTxSign(CMutableTransaction& tx, const std::string& flagStr)
 {
     int nHashType = SIGHASH_ALL;
@@ -539,6 +568,8 @@ static void MutateTxSign(CMutableTransaction& tx, const std::string& flagStr)
         throw std::runtime_error("privatekeys register variable must be set.");
     CBasicKeyStore tempKeystore;
     UniValue keysObj = registers["privatekeys"];
+
+    ChainSigVersion chainSigVersion = CurrentChainSigVersion();
 
     for (unsigned int kidx = 0; kidx < keysObj.size(); kidx++) {
         if (!keysObj[kidx].isStr())
@@ -622,14 +653,14 @@ static void MutateTxSign(CMutableTransaction& tx, const std::string& flagStr)
         SignatureData sigdata;
         // Only sign SIGHASH_SINGLE if there's a corresponding output:
         if (!fHashSingle || (i < mergedTx.vout.size()))
-            ProduceSignature(MutableTransactionSignatureCreator(&keystore, &mergedTx, i, amount, nHashType), prevPubKey, sigdata);
+            ProduceSignature(MutableTransactionSignatureCreator(&keystore, &mergedTx, i, amount, nHashType, chainSigVersion), prevPubKey, sigdata);
 
         // ... and merge in other signatures:
         BOOST_FOREACH(const CTransaction& txv, txVariants)
-            sigdata = CombineSignatures(prevPubKey, MutableTransactionSignatureChecker(&mergedTx, i, amount), sigdata, DataFromTransaction(txv, i));
+            sigdata = CombineSignatures(prevPubKey, MutableTransactionSignatureChecker(&mergedTx, i, amount, chainSigVersion), sigdata, DataFromTransaction(txv, i));
         UpdateTransaction(mergedTx, i, sigdata);
 
-        if (!VerifyScript(txin.scriptSig, prevPubKey, &txin.scriptWitness, STANDARD_SCRIPT_VERIFY_FLAGS, MutableTransactionSignatureChecker(&mergedTx, i, amount)))
+        if (!VerifyScript(txin.scriptSig, prevPubKey, &txin.scriptWitness, STANDARD_SCRIPT_VERIFY_FLAGS, MutableTransactionSignatureChecker(&mergedTx, i, amount, chainSigVersion)))
             fComplete = false;
     }
 

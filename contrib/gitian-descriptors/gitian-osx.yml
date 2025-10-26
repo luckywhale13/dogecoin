@@ -1,5 +1,5 @@
 ---
-name: "dogecoin-osx-1.14"
+name: "dogecoin-osx-5.0"
 enable_cache: true
 suites:
 - "bionic"
