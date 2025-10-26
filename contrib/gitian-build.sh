@@ -220,7 +220,7 @@ if [[ $test == true ]]; then
     if [[ $commit == true ]]; then
         VERSION="f80bfe9068ac1a0619d48dad0d268894d926941e"
     else
-        VERSION="1.14.3"
+        VERSION="5.0.0"
     fi
     DESCRIPTORS=('test')
     SIGN_DESCRIPTORS=()

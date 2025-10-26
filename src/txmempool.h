@@ -46,7 +46,7 @@ static const int FEEFILE_MIN_COMPAT_VERSION_WRITER = 1140700; // 1.14.7.0
 
 inline double AllowFreeThreshold()
 {
-    return COIN * 144 / 250;
+    return COIN * 1440 / 250;
 }
 
 inline bool AllowFree(double dPriority)

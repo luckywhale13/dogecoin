@@ -1,5 +1,5 @@
 ---
-name: "dogecoin-linux-1.14"
+name: "dogecoin-linux-5.0"
 enable_cache: true
 suites:
 - "focal"
