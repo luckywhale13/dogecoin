@@ -36,7 +36,7 @@ test=false
 # Other Basic variables
 SIGNER=
 VERSION=
-url=https://github.com/dogecoin/dogecoin
+url=https://github.com/luckywhale13/dogecoin
 proc=2
 mem=2000
 scriptName=$(basename -- "$0")
@@ -69,7 +69,7 @@ Options:
 -j proc             Number of processes to use. Default $proc
 -m n                Memory to allocate in MiB. Default $mem
 -c|--commit         Indicate that the version argument is for a commit or branch
--u|--url repo       Specify the URL of the repository. Default is https://github.com/dogecoin/dogecoin
+-u|--url repo       Specify the URL of the repository. Default is https://github.com/luckywhale13/dogecoin
 --test              CI TEST. Uses Docker
 -h|--help           Print this help message
 EOF
@@ -257,8 +257,8 @@ fi
 ### Setup ###
 
 if [[ $setup == true ]]; then
-    git clone https://github.com/dogecoin/gitian.sigs.git
-    git clone https://github.com/dogecoin/dogecoin-detached-sigs.git
+    git clone https://github.com/luckywhale13/gitian.sigs.git
+    git clone https://github.com/luckywhale13/dogecoin-detached-sigs.git
     git clone https://github.com/devrandom/gitian-builder.git
 
     pushd ./gitian-builder

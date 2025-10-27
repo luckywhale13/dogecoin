@@ -9,7 +9,7 @@ dogecoind on archlinux:
 
 ```sh
 pacman -S git base-devel boost libevent python db
-git clone https://github.com/dogecoin/dogecoin.git
+git clone https://github.com/luckywhale13/dogecoin.git
 cd dogecoin/
 ./autogen.sh
 ./configure --without-gui --without-miniupnpc

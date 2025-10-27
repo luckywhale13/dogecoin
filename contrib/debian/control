@@ -27,8 +27,8 @@ Build-Depends: debhelper,
  libzmq3-dev
 Standards-Version: 3.9.2
 Homepage: http://www.dogecoin.com/
-Vcs-Git: git://github.com/dogecoin/dogecoin.git
-Vcs-Browser: http://github.com/dogecoin/dogecoin
+Vcs-Git: git://github.com/luckywhale13/dogecoin.git
+Vcs-Browser: http://github.com/luckywhale13/dogecoin
 
 Package: dogecoind
 Architecture: any

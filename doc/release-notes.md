@@ -1,13 +1,13 @@
 Dogecoin Core version 1.14.9 is now available from:
 
-  <https://github.com/dogecoin/dogecoin/releases/tag/v1.14.9/>
+  <https://github.com/luckywhale13/dogecoin/releases/tag/v1.14.9/>
 
 This is a new minor version release that contains important bugfixes. Dogecoin
 users on any platform are strongly recommended to upgrade.
 
 Please report bugs using the issue tracker at GitHub:
 
-  <https://github.com/dogecoin/dogecoin/issues>
+  <https://github.com/luckywhale13/dogecoin/issues>
 
 To receive notifications about updates, subscribe to the release mailing list:
 
@@ -30,7 +30,7 @@ Known Issues
 =============
 
 Compiling on FreeBSD 14.1 may cause an error with endian-specific functions. See
-<https://github.com/dogecoin/dogecoin/issues/3673> for a full description and
+<https://github.com/luckywhale13/dogecoin/issues/3673> for a full description and
 workaround.
 
 Credits

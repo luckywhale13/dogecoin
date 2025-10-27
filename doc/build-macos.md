@@ -5,7 +5,7 @@ Tested on MacOs Ventura and Sonoma on Intel (x86_64) and Apple Silicon (arm64) m
 ### Clone dogecoin locally, or check it out, etc. ###
 
 ```sh
-git clone https://github.com/dogecoin/dogecoin.git
+git clone https://github.com/luckywhale13/dogecoin.git
 ```
 
 ### Set up OSX basic build dependencies. ##

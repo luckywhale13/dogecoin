@@ -54,8 +54,8 @@ Select language: [EN](./README.md) | [CN](./README_zh_CN.md) | [PT](./README_pt_
 
 منابع اصلی توسعه:
 
-- [پروژه‌های Github](https://github.com/dogecoin/dogecoin/projects) به منظور پیگیری کارهای برنامه‌ریزی‌شده و دردست‌اقدام برای نسخه‌های آتی استفاده می‌شوند.
-- [مباحث در Github](https://github.com/dogecoin/dogecoin/discussions) به منظور مورد بحث قرار دادن شاخصه‌های برنامه‌ریزی‌شده و نشده‌ی نرم‌افزار Dogecoin Core، پروتکل‌های زیربنایی آن و دارایی DOGE مورد استفاده قرار می‌گیرد.
+- [پروژه‌های Github](https://github.com/luckywhale13/dogecoin/projects) به منظور پیگیری کارهای برنامه‌ریزی‌شده و دردست‌اقدام برای نسخه‌های آتی استفاده می‌شوند.
+- [مباحث در Github](https://github.com/luckywhale13/dogecoin/discussions) به منظور مورد بحث قرار دادن شاخصه‌های برنامه‌ریزی‌شده و نشده‌ی نرم‌افزار Dogecoin Core، پروتکل‌های زیربنایی آن و دارایی DOGE مورد استفاده قرار می‌گیرد.
 - [زیرقسمت Dogecoindev در سایت Reddit](https://www.reddit.com/r/dogecoindev/)
 
 ### استراتژی نسخه‌گذاری
@@ -78,13 +78,13 @@ Select language: [EN](./README.md) | [CN](./README_zh_CN.md) | [PT](./README_pt_
 ## مشارکت 🤝
 
 اگر باگی را یافته‌اید و یا مشکلی را در رابطه با این نرم‌افزار تجربه کرده‌اید، لطفا آن را با استفاده از
-[سامانه‌ی مشکل‌ها](https://github.com/dogecoin/dogecoin/issues/new?assignees=&labels=bug&template=bug_report.md&title=%5Bbug%5D+).
+[سامانه‌ی مشکل‌ها](https://github.com/luckywhale13/dogecoin/issues/new?assignees=&labels=bug&template=bug_report.md&title=%5Bbug%5D+).
 با ما مطرح نمایید.
 
 لطفا قسمت
 [شیوه‌نامه‌ی مشارکت](CONTRIBUTING.md)
 را به منظور مطلع شدن از روش‌هایی که توسط آن‌ها می‌توانید در توسعه‌ی Dogecoin Core حضور داشته باشید را مطالعه فرمایید. اغلب
-[موضوعات خواستار کمک](https://github.com/dogecoin/dogecoin/labels/help%20wanted)ی یافت می‌شوند
+[موضوعات خواستار کمک](https://github.com/luckywhale13/dogecoin/labels/help%20wanted)ی یافت می‌شوند
 که همکاری شما تاثیر بسزایی خواهد داشت و بسیار مورد ستایش قرار خواهد گرفت. وای!
 
 ## انجمن‌ها 🚀🍾
@@ -106,7 +106,7 @@ Select language: [EN](./README.md) | [CN](./README_zh_CN.md) | [PT](./README_pt_
 در مورد Dogecoin پرسشی دارید؟ ممکن است پاسخ آن همین الآن در
 [FAQ](doc/FAQ.md)
 و یا در
-[قسمت پرسش و پاسخ](https://github.com/dogecoin/dogecoin/discussions/categories/q-a)
+[قسمت پرسش و پاسخ](https://github.com/luckywhale13/dogecoin/discussions/categories/q-a)
 مباحث وجود داشته باشد!
 
 ## مجوز - مجوز خیلی زیاد ⚖️

@@ -65,7 +65,7 @@ build process.
 ## Get the Source Code
 
 To build Dogecoin from source code, you'll need the source code. Either check it out via `git` or download
-a zip file. (Look at the green "<> Code" button on [the Dogecoin GitHub repository](https://github.com/dogecoin/dogecoin/)).
+a zip file. (Look at the green "<> Code" button on [the Dogecoin GitHub repository](https://github.com/luckywhale13/dogecoin/)).
 
 Make sure this code is available in your Ubuntu directory. If you've unzipped a single downloaded file, you may need to change
 the permissions of all extracted files with command like:
@@ -75,7 +75,7 @@ the permissions of all extracted files with command like:
 If you've downloaded via `git`, do not use `sudo`. Instead prefer something like:
 
     cd $HOME
-    git clone https://github.com/dogecoin/dogecoin.git
+    git clone https://github.com/luckywhale13/dogecoin.git
     git checkout <branchname>
 
 ... where `<branchname>` is the name of the branch you want to build, such as

@@ -41,8 +41,8 @@ A Dogecoin Core é um programa de código aberto gerido pela comunidade. O proce
 
 Recursos principais de Desenvolvimento:
 
-* [Projetos do Github](https://github.com/dogecoin/dogecoin/projects) é utilizado para conduzir trabalhos planejados ou que estejam em desenvolvimento para as próximas atualizações.
-* [Discussão do Github](https://github.com/dogecoin/dogecoin/discussions) é usado para discutir sobre funcionalidades, planejadas ou não, relacionadas ao desenvolvimento do programa Dogecoin Core, os protocolos adjacentes e o criptoativo DOGE.
+* [Projetos do Github](https://github.com/luckywhale13/dogecoin/projects) é utilizado para conduzir trabalhos planejados ou que estejam em desenvolvimento para as próximas atualizações.
+* [Discussão do Github](https://github.com/luckywhale13/dogecoin/discussions) é usado para discutir sobre funcionalidades, planejadas ou não, relacionadas ao desenvolvimento do programa Dogecoin Core, os protocolos adjacentes e o criptoativo DOGE.
 * [Dogecoindev subreddit](https://www.reddit.com/r/dogecoindev/)
 
 ### Estratégia das Versões
@@ -62,10 +62,10 @@ Este repositório possui 3 principais ramificações (branchs), são essas:
 
 ## Contribuindo 🤝
 
-Se você achar um bug ou passar por alguma experiência incomum com este programa, por favor reporte o ocorrido usado o [sistema de problemas (issues)](https://github.com/dogecoin/dogecoin/issues/new?assignees=&labels=bug&template=bug_report.md&title=%5Bbug%5D+).
+Se você achar um bug ou passar por alguma experiência incomum com este programa, por favor reporte o ocorrido usado o [sistema de problemas (issues)](https://github.com/luckywhale13/dogecoin/issues/new?assignees=&labels=bug&template=bug_report.md&title=%5Bbug%5D+).
 
 Por favor, acesse o [guia de contribuições](CONTRIBUTING.md) para ver como você pode participar
-do desenvolvimento do Dogecoin Core. Existem alguns [pedidos de ajuda](https://github.com/dogecoin/dogecoin/labels/help%20wanted)
+do desenvolvimento do Dogecoin Core. Existem alguns [pedidos de ajuda](https://github.com/luckywhale13/dogecoin/labels/help%20wanted)
 onde os contribuintes terão grande importância e apreço. wow.
 
 ## Comunidades 🚀🍾
@@ -85,7 +85,7 @@ Aqui estão alguns lugares pra visitar:
 
 Você possui alguma questão relacionada à Dogecoin? Talvez uma resposta já esteja disponivel no
 [FAQ](doc/FAQ.md) ou na
-[seção Q&A](https://github.com/dogecoin/dogecoin/discussions/categories/q-a)
+[seção Q&A](https://github.com/luckywhale13/dogecoin/discussions/categories/q-a)
 do nosso quadro de discussão!
 
 ## Licenças ⚖️

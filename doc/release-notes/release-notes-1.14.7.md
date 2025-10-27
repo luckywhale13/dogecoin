@@ -1,6 +1,6 @@
 Dogecoin Core version 1.14.7 is now available from:
 
-  <https://github.com/dogecoin/dogecoin/releases/tag/v1.14.7/>
+  <https://github.com/luckywhale13/dogecoin/releases/tag/v1.14.7/>
 
 This is a new minor version release, including enchancements to several RPC
 methods and important security updates for Dogecoin-Qt. Dogecoin-Qt users on
@@ -8,7 +8,7 @@ any platform are strongly recommended to upgrade.
 
 Please report bugs using the issue tracker at GitHub:
 
-  <https://github.com/dogecoin/dogecoin/issues>
+  <https://github.com/luckywhale13/dogecoin/issues>
 
 To receive notifications about updates, subscribe to the release mailing list:
 
@@ -231,7 +231,7 @@ Minor Changes
 * Added a translation in Vietnamese (#3060), and fixed missing information in
   the Chinese README translations (#3070)
 * Updated the python `ltc-scrypt` module to a maintained fork (#3080), which
-  can be found at https://github.com/dogecoin/ltc-scrypt
+  can be found at https://github.com/luckywhale13/ltc-scrypt
 * Backported a pure Python implementation of RIPEMD160 from Bitcoin Core (#3081)
 * Removed historical OpenSSL comparison tests to increase compatibility with
   OpenSSL 3+ (#3079)

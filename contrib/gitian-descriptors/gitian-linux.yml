@@ -32,7 +32,7 @@ packages:
 - "python3-setuptools"
 - "python3-pip"
 remotes:
-- "url": "https://github.com/dogecoin/dogecoin.git"
+- "url": "https://github.com/luckywhale13/dogecoin.git"
   "dir": "dogecoin"
 files:
 - "lief-0.12.3-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"

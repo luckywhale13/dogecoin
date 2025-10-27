@@ -1,13 +1,13 @@
 Dogecoin Core version 1.14.8 is now available from:
 
-  <https://github.com/dogecoin/dogecoin/releases/tag/v1.14.8/>
+  <https://github.com/luckywhale13/dogecoin/releases/tag/v1.14.8/>
 
 This is a new minor version release. Dogecoin users on any platform are
 strongly recommended to upgrade.
 
 Please report bugs using the issue tracker at GitHub:
 
-  <https://github.com/dogecoin/dogecoin/issues>
+  <https://github.com/luckywhale13/dogecoin/issues>
 
 To receive notifications about updates, subscribe to the release mailing list:
 
