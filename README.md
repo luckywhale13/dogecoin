@@ -11,7 +11,7 @@ Dogecoin [LKY]
 
 </div>
 
-## What's New in V3.0.0?
+## What's New in V5.0.0?
 This release is an update aimed at modernizing the Dogecoin blockchain with AuxPow support for merged mining.
 
 ## Features
