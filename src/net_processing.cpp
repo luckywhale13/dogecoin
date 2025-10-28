@@ -1472,18 +1472,6 @@ bool static ProcessMessage(CNode* pfrom, const std::string& strCommand, CDataStr
         pfrom->SetSendVersion(nSendVersion);
         pfrom->nVersion = nVersion;
 
-        LogPrint("net", "received version message: %s: version %d, blocks=%d, us=%s, peer=%ld \n", (std::string) cleanSubVer, (int) pfrom->nVersion, (int)  pfrom->nStartingHeight, addrMe.ToString(), pfrom->id);
-
-        if ((nServices & NODE_SIGREVIVAL) == 0)
-        {
-            // Remote is peer in the old network, disconnect
-            LogPrintf("peer=%d is not in the new network, disconnecting\n", pfrom->id);
-            // TODO: currenly let them reconnect when they upgrade, should we ban them?
-            // Misbehaving(pfrom->GetId(), 1);
-            pfrom->fDisconnect = true;
-            return false;
-        }
-
         if((nServices & NODE_WITNESS))
         {
             LOCK(cs_main);

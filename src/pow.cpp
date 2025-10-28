@@ -22,7 +22,7 @@ bool AllowMinDifficultyForBlock(const CBlockIndex* pindexLast, const CBlockHeade
 
     // Dogecoin: Magic number at which reset protocol switches
     // check if we allow minimum difficulty at this block-height
-    if ((uint32_t)pindexLast->nHeight < params.nHeightEffective)
+    if (pindexLast->nHeight < 120)
         return false;
 
     // Allow for a minimum block time if the elapsed time > 2*nTargetSpacing
