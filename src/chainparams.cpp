@@ -102,13 +102,13 @@ public:
         // Deployment of BIP68, BIP112, and BIP113.
         // XXX: BIP heights and hashes all need to be updated to Dogecoin values
         consensus.vDeployments[Consensus::DEPLOYMENT_CSV].bit = 0;
-        consensus.vDeployments[Consensus::DEPLOYMENT_CSV].nStartTime = 1725497122; // Sep 05 2024 00:45:22
-        consensus.vDeployments[Consensus::DEPLOYMENT_CSV].nTimeout = 1788569122; // Sep 05 2026 00:45:22
+        consensus.vDeployments[Consensus::DEPLOYMENT_CSV].nStartTime = 1724732207; // Aug 27 2024 04:16:47
+        consensus.vDeployments[Consensus::DEPLOYMENT_CSV].nTimeout = 0; // Disabled
 
         // Deployment of SegWit (BIP141, BIP143, and BIP147)
         consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].bit = 1;
-        consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nStartTime = 1725497122; // Sep 05 2024 00:45:22
-        consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nTimeout = 1788569122; // Sep 05 2026 00:45:22
+        consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nStartTime = 1724732207; // Aug 27 2024 04:16:47
+        consensus.vDeployments[Consensus::DEPLOYMENT_SEGWIT].nTimeout = 0; // Disabled
 
         // The best chain should have at least this much work.
         consensus.nMinimumChainWork = uint256S("0x000000000000000000000000000000000000000000000c6764d4993a848f6f28"); // 620035
