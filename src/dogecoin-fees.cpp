@@ -24,9 +24,9 @@ CFeeRate GetDogecoinFeeRate(int priority)
     switch(priority)
     {
     case SUCH_EXPENSIVE:
-        return CFeeRate(COIN / 10 * 88); // 8.8 LKY, but very carefully avoiding floating point maths
+        return CFeeRate(COIN / 100 * 588); // 5.88 LKY, but very carefully avoiding floating point maths
     case MANY_GENEROUS:
-        return CFeeRate(CWallet::minTxFee.GetFeePerK() * 58);
+        return CFeeRate(CWallet::minTxFee.GetFeePerK() * 100);
     case AMAZE:
         return CFeeRate(CWallet::minTxFee.GetFeePerK() * 10);
     case WOW:
