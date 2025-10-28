@@ -1,4 +1,5 @@
-name: dogecoin-core # you probably want to 'snapcraft register <name>'
+name: dogecoin-core
+# Running 'snapcraft register <name>' is advised
 version: '5.0.0'
 summary: Reference client of Dogecoin, a peer-to-peer digital currency like Bitcoin.
 description: |
